@@ -44,15 +44,15 @@ if len(sys.argv) != 3:
 infile  = sys.argv[1]
 outfile = sys.argv[2]
 
+# Read the original code in
 f = open(infile, "r")
-
 lines = []
 for line in f:
     lines.append(line)
 
 f.close()
 
-
+# Transform the code with regex
 import re
 
 # The "toplevel" is the current (global) label
@@ -75,6 +75,7 @@ for line in lines:
     x = re.sub(regex_local, r"\1" + toplevel + r"\2", line)
     newlines.append(x)
 
+# Write the transformed code to the outputfile
 f = open(outfile, "w")
 for line in newlines:
     f.write(line)
