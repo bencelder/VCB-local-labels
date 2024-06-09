@@ -1,6 +1,6 @@
 # VCB-local-labels
 
-A preprocessor for VirtualCircuitBoard that enables local labels. For example,
+A preprocessor for the VirtualCircuitBoard assembler that enables local labels. For example,
 ```
 @ foo
 @ _bar
