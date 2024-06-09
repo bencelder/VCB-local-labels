@@ -56,7 +56,7 @@ f.close()
 import re
 
 # The "toplevel" is the current (global) label
-# The "local" is the label that we want to be local to label
+# The "local" is the label that we want to be local to the global label
 regex_toplevel = "^[ \t]*@[ \t]+([a-zA-Z][a-zA-Z0-9]*)[ \t]*\n"
 regex_local    = "([ \t])(_[a-zA-Z0-9]*)"
 
