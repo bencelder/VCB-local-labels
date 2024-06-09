@@ -12,7 +12,7 @@ expands out to
 @ foo_bar
 jmp foo_bar
 ```
-This enables one to reuse common labels like @_loop, @_done, etc:
+This enables one to reuse common labels like ```@ _loop```, ```@ _done```, etc.  For instance, we can re-use ```_bar```, and we can refer to ```foo_bar``` with its full name:
 ```
 @ baz
 @ _bar
