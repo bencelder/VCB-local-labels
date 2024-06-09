@@ -1,6 +1,6 @@
 # VCB-local-labels
 
-A preprocessor for VCB that enables local labels. For example,
+A preprocessor for VirtualCircuitBoard that enables local labels. For example,
 ```
 @ foo
 @ _bar
@@ -12,7 +12,6 @@ expands out to
 @ foo_bar
 jmp foo_bar
 ```
-
 This enables one to reuse common labels like @_loop, @_done, etc:
 ```
 @ baz
@@ -20,7 +19,6 @@ This enables one to reuse common labels like @_loop, @_done, etc:
 jz  foo_bar
 jmp _bar
 ```
-
 which expands out to
 ```
 @ baz
@@ -28,8 +26,7 @@ which expands out to
 jz  foo_bar
 jmp baz_bar
 ```
-
-Usage:
+Usage: in the terminal, run
 > python preprocessor.py test.vcbasm test-out.vcbasm
 
 If this is the final stage before running the simulator, you want to have the output file be named your-circuit-path.vcbasm
