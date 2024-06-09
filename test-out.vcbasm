@@ -1,0 +1,18 @@
+
+@ foo
+@ foo_bar
+jmp foo_bar
+
+@ baz
+@ baz_bar		
+jz  foo_bar
+jmp baz_bar
+
+
+# Support full (local) names:
+
+@ qux
+@ qux_bar
+jz qux_bar		# Expands to qux_bar, not qux_bar_bar
+jmp qux_bar
+
