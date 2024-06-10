@@ -32,3 +32,8 @@ Usage: in the terminal, run
 If this is the final stage before running the simulator, you'll want to have the output file be named ```your-circuit-path.vcbasm```
 
 There is no error catching implemented. Malformed input may not result in an error message/crash, but will likely produce broken code.
+
+To do:
+- Better handling of comments
+- Use . instead of _ for local labels
+

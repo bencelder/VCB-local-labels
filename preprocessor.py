@@ -2,28 +2,28 @@
 A preprocessor for VCB that enables local labels. For example,
 
 @ foo
-@ _bar
+@ .bar
 
-jmp _bar
+jmp .bar
 
 expands out to 
 @ foo
-@ foo_bar
-jmp foo_bar
+@ foo.bar
+jmp foo.bar
 
 This enables one to reuse common labels like @_loop, @_done, etc:
 
 @ baz
-@ _bar
-jz  foo_bar
-jmp _bar
+@ .bar
+jz  foo.bar
+jmp .bar
 
 which expands out to
 
 @ baz
-@ _bar
-jz  foo_bar
-jmp baz_bar
+@ .bar
+jz  foo.bar
+jmp baz.bar
 
 Usage:
 > python preprocessor.py infile.vcbasm outfile.vcbasm
@@ -58,22 +58,37 @@ import re
 # The "toplevel" is the current (global) label
 # The "local" is the label that we want to be local to label
 regex_toplevel = "^[ \t]*@[ \t]+([a-zA-Z][a-zA-Z0-9]*)[ \t]*\n"
-regex_local    = "([ \t])(_[a-zA-Z0-9]*)"
+regex_local    = "([ \t])(.[a-zA-Z0-9]*)"
 
 newlines = []
 toplevel = ''
 for line in lines:
 
+    '''
+    if not line:
+        newlines.append("")
+        continue
+
+    # split off comments
+    x = line.split('#', 1)
+    if len(x) == 1:
+        line = x[0]
+        comment = ''
+    else:
+        line, comment = x
+        comment = "#" + comment
+    '''
+
     # Check for updates to the global label
     x = re.findall(regex_toplevel, line)
     if x:
         toplevel = x[0]
-        newlines.append(line)
+        newlines.append(line + comment)
         continue
 
     # Otherwise, do a find/replace to expand the local labels to their full names
     x = re.sub(regex_local, r"\1" + toplevel + r"\2", line)
-    newlines.append(x)
+    newlines.append(x + comment)
 
 # Write the transformed code to the outputfile
 f = open(outfile, "w")
