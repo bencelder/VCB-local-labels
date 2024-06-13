@@ -1,19 +1,19 @@
 @ foo
-@ foo.bar
-jmp foo.bar
+@ foo_bar
+jmp foo_bar
 
 # Reuse local labels, and full names may be used for previous local labels
 
 @ baz
-@ baz.bar	baz	
-jz baz foo.bar
-jmp baz.bar
+@ baz_bar		
+jz  foo_bar
+jmp baz_bar
 
 
 # Support full (local) names:
 
 @ qux
-@ quxqux.bar	# Expands to qux.bar, not qux.bar.bar
-jz qux.bar	
-jmp quxqux.bar
+@ qux_bar	# Expands to qux_bar, not qux_bar.bar
+jz qux_bar	
+jmp qux_bar
 

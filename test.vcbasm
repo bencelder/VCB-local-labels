@@ -17,3 +17,8 @@ jmp .bar
 jz .bar	
 jmp qux.bar
 
+# Various other tests
+
+@ qux1
+
+@ name_with_underscore
