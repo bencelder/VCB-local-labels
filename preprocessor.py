@@ -82,7 +82,6 @@ regex_full_name = r"([a-zA-Z_]+)\.([a-zA-Z0-9][a-zA-Z0-9_]*)"
 # A local label in use consists of a space or tab, then a ., and then a local name
 regex_local = r"([ \t]+)\.([a-zA-Z0-9][a-zA-Z0-9_]*)"
 
-
 newlines = []
 toplevel = ''
 for line in lines:
