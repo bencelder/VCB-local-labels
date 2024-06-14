@@ -3,8 +3,8 @@
 A preprocessor for the VirtualCircuitBoard assembler that enables local labels. For example,
 ```
 @ foo
-@ _bar
-jmp _bar
+@ .bar
+jmp .bar
 ```
 expands out to 
 ```
@@ -12,17 +12,17 @@ expands out to
 @ foo_bar
 jmp foo_bar
 ```
-This enables one to reuse common labels like ```@ _loop```, ```@ _done```, etc.  For instance, we can re-use ```_bar```, and we can still refer to ```foo_bar``` by using its full name:
+This enables one to reuse common labels like ```.loop```, ```.done```, etc.  For instance, we can re-use ```.bar```, and we can still refer to ```foo.bar``` by using its full name:
 ```
 @ baz
-@ _bar
-jz  foo_bar
-jmp _bar
+@ .bar
+jz  foo.bar
+jmp .bar
 ```
-which expands out to
+The preprocessor expands this out to
 ```
 @ baz
-@ _bar
+@ baz_bar
 jz  foo_bar
 jmp baz_bar
 ```

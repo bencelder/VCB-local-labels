@@ -2,28 +2,28 @@
 A preprocessor for VCB that enables local labels. For example,
 
 @ foo
-@ _bar
+@ .bar
 
-jmp _bar
+jmp .bar
 
 expands out to 
 @ foo
-@ foo_bar
-jmp foo_bar
+@ foo.bar
+jmp foo.bar
 
-This enables one to reuse common labels like @_loop, @_done, etc:
+This enables one to reuse common labels like .loop, .done, etc:
 
 @ baz
-@ _bar
-jz  foo_bar
-jmp _bar
+@ .bar
+jz  foo.bar
+jmp .bar
 
 which expands out to
 
 @ baz
-@ _bar
-jz  foo_bar
-jmp baz_bar
+@ .bar
+jz  foo.bar
+jmp baz.bar
 
 Usage:
 > python preprocessor.py infile.vcbasm outfile.vcbasm
@@ -31,6 +31,8 @@ Usage:
 If this is the final stage before running the code, you want to have outfile = your-circuit-path.vcbasm
 
 There is no error catching implemented. Malformed input may not result in an error message/crash.
+
+This currently only does ONE replacement per line.
 """
 import sys
 
@@ -56,13 +58,34 @@ f.close()
 import re
 
 # The "toplevel" is the current (global) label
-# The "local" is the label that we want to be local to the global label
-regex_toplevel = "^[ \t]*@[ \t]+([a-zA-Z][a-zA-Z0-9]*)[ \t]*\n"
-regex_local    = "([ \t])(_[a-zA-Z0-9]*)"
+# The "local" is the label that we want to be local to label
+
+# A toplevel statement looks like
+# @ name_of_thing   # optional comment
+# That is, @, followed by at least one spaces or tab, and then a label name.
+# The label name must start with a letter, but after that can contain any number of
+# underscores or numbers.
+# It is followed by a space, tab, or newline
+# https://regex101.com/r/OHPAvk/1
+# By matching the trailing whitespace, we avoid matching on full names like
+# @ foo.bar
+regex_toplevel = r"@[ \t]+([a-zA-Z][a-zA-Z0-9_]*)[ \t\n]"
+
+# A full label name looks like global_name.local_name
+# The local name must start with a letter or number, and can contain underscores
+# https://regex101.com/r/RrMqKS/1
+# We match to the last character of the global name, so as to avoid matching
+# local name usage like
+# @ .bar
+regex_full_name = r"([a-zA-Z_]+)\.([a-zA-Z0-9][a-zA-Z0-9_]*)"
+
+# A local label in use consists of a space or tab, then a ., and then a local name
+regex_local = r"([ \t]+)\.([a-zA-Z0-9][a-zA-Z0-9_]*)"
 
 newlines = []
 toplevel = ''
 for line in lines:
+
 
     # Check for updates to the global label
     x = re.findall(regex_toplevel, line)
@@ -71,9 +94,12 @@ for line in lines:
         newlines.append(line)
         continue
 
-    # Otherwise, do a find/replace to expand the local labels to their full names
-    x = re.sub(regex_local, r"\1" + toplevel + r"\2", line)
-    newlines.append(x)
+    # First do a find/replace on full names (globalname.localname -> globalname_localname)
+    line = re.sub(regex_full_name, r"\1_\2", line)
+
+    # Now do a find/replace to expand the local labels to their full names
+    line = re.sub(regex_local, r"\1" + toplevel + r"_\2", line)
+    newlines.append(line)
 
 # Write the transformed code to the outputfile
 f = open(outfile, "w")

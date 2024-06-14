@@ -1,18 +1,41 @@
-
 @ foo
-@ _bar
-jmp _bar
+@ .bar
+jmp .bar
+
+# Reuse local labels, and full names may be used for previous local labels
 
 @ baz
-@ _bar		
-jz  foo_bar
-jmp _bar
+@ .bar		
+jz  foo.bar
+jmp .bar
 
 
 # Support full (local) names:
 
 @ qux
-@ qux_bar
-jz _bar		# Expands to qux_bar, not qux_bar_bar
-jmp qux_bar
+@ qux.bar	# Expands to qux.bar, not qux.bar.bar
+jz .bar	
+jmp qux.bar
+
+# Various other tests
+
+@ qux1
+
+@ name_with_underscore
+
+lit 10
+@ count
+
+@ .loop
+	dup
+	jz .done
+	lit 1
+	sub
+	jmp .loop
+
+@ .done
+	jmp .done
+
+
+
 
