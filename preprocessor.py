@@ -11,7 +11,7 @@ expands out to
 @ foo.bar
 jmp foo.bar
 
-This enables one to reuse common labels like @_loop, @_done, etc:
+This enables one to reuse common labels like .loop, .done, etc:
 
 @ baz
 @ .bar
