@@ -67,18 +67,19 @@ import re
 # underscores or numbers.
 # It is followed by a space, tab, or newline
 # https://regex101.com/r/OHPAvk/1
-# By matching the trailing spaces, we avoid hitting on full names like
+# By matching the trailing whitespace, we avoid matching on full names like
 # @ foo.bar
 regex_toplevel = r"@[ \t]+([a-zA-Z][a-zA-Z0-9_]*)[ \t\n]"
 
 # A full label name looks like global_name.local_name
-
 # The local name must start with a letter or number, and can contain underscores
 # https://regex101.com/r/RrMqKS/1
+# We match to the last character of the global name, so as to avoid matching
+# local name usage like
+# @ .bar
 regex_full_name = r"([a-zA-Z_]+)\.([a-zA-Z0-9][a-zA-Z0-9_]*)"
 
-# A local label in use is a space or tab, then a ., and then a local name
-#regex_local = r"([ \t])(.[a-zA-Z0-9]*)"
+# A local label in use consists of a space or tab, then a ., and then a local name
 regex_local = r"([ \t]+)\.([a-zA-Z0-9][a-zA-Z0-9_]*)"
 
 

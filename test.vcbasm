@@ -23,4 +23,19 @@ jmp qux.bar
 
 @ name_with_underscore
 
+lit 10
+@ count
+
+@ .loop
+	dup
+	jz .done
+	lit 1
+	sub
+	jmp .loop
+
+@ .done
+	jmp .done
+
+
+
 

@@ -17,3 +17,25 @@ jmp baz_bar
 jz qux_bar	
 jmp qux_bar
 
+# Various other tests
+
+@ qux1
+
+@ name_with_underscore
+
+lit 10
+@ count
+
+@ count_loop
+	dup
+	jz count_done
+	lit 1
+	sub
+	jmp count_loop
+
+@ count_done
+	jmp count_done
+
+
+
+
