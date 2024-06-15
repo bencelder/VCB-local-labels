@@ -46,17 +46,65 @@ if len(sys.argv) != 3:
 infile  = sys.argv[1]
 outfile = sys.argv[2]
 
+def readlines(f):
+    f = open(f, "r")
+
+    lines = []
+    for line in f:
+        lines.append(line)
+
+    f.close()
+    return lines
+
 # Read the original code in
+#lines = readlines(infile)
+'''
 f = open(infile, "r")
 lines = []
 for line in f:
     lines.append(line)
 
 f.close()
+'''
 
 # Transform the code with regex
 import re
 
+######### Include files ##########
+# Support statements like
+# %include "foo.vcbasm"
+
+regex_include = r"%include[ \t]+\"(.+?)\""
+
+
+def expand_includes(f):
+    '''
+    Recursively make a (flat) list of lines of code.  All
+    statements like 
+    %include "foo.vcbasm"
+    get expanded into the code contained in those files, in
+    the order that they appear.
+    '''
+    lines = readlines(f)
+    newlines = []
+    for line in lines:
+
+        # Check for an include statement
+        x = re.findall(regex_include, line)
+        if x:
+            included_fname = x[0]
+            included_lines = expand_includes(included_fname)
+            [newlines.append(iline) for iline in included_lines]
+            continue
+
+        # Non-include statements pass straight through
+        newlines.append(line)
+    return newlines
+
+lines = expand_includes(infile)
+
+
+######### Local names ############
 # The "toplevel" is the current (global) label
 # The "local" is the label that we want to be local to label
 

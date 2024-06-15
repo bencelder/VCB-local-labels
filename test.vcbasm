@@ -38,4 +38,7 @@ lit 10
 
 
 
+%include "foo.vcbasm"
+
+Last line
 

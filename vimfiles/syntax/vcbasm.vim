@@ -12,6 +12,9 @@ hi def link kword Keyword
 syntax match at_label /@/
 hi def link at_label Keyword
 
+syntax match include_kword /%include/
+hi def link include_kword Keyword
+
 " The \v at the front removes the need for escape characters
 syntax match comment /\v#.*/
 hi def link comment Comment
